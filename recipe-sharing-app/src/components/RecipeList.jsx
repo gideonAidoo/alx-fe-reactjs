@@ -1,51 +1,31 @@
- // RecipeList component
-   // AddRecipeForm component
-  import { useState } from 'react';
-  import { useRecipeStore } from './recipeStore';
+// src/components/RecipeList.jsx
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { useRecipeStore } from './recipeStore';
 
-  const RecipeList = () => {
-    const recipes = useRecipeStore(state => state.recipes);
+const RecipeList = () => {
+  const recipes = useRecipeStore((state) => state.recipes);
 
-    return (
-      <div>
-        {recipes.map(recipe => (
-          <div key={recipe.id}>
-            <h3>{recipe.title}</h3>
+  return (
+    <div>
+      <h2>Recipe List</h2>
+      {recipes.length === 0 ? (
+        <p>No recipes yet. Add one!</p>
+      ) : (
+        recipes.map((recipe) => (
+          <div
+            key={recipe.id}
+            style={{ border: '1px solid #ccc', margin: '8px', padding: '8px' }}
+          >
+            <h3>
+              <Link to={`/recipe/${recipe.id}`}>{recipe.title}</Link>
+            </h3>
             <p>{recipe.description}</p>
           </div>
-        ))}
-      </div>
-    );
-  };
+        ))
+      )}
+    </div>
+  );
+};
 
-
-  const AddRecipeForm = () => {
-    const addRecipe = useRecipeStore(state => state.addRecipe);
-    const [title, setTitle] = useState('');
-    const [description, setDescription] = useState('');
-
-    const handleSubmit = (event) => {
-      event.preventDefault();
-      addRecipe({ id: Date.now(), title, description });
-      setTitle('');
-      setDescription('');
-    };
-
-    return (
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          placeholder="Title"
-        />
-        <textarea
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-          placeholder="Description"
-        />
-        <button type="submit">Add Recipe</button>
-      </form>
-    );
-  };
-    export default RecipeList;
+export default RecipeList;
