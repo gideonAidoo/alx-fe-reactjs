@@ -1,11 +1,12 @@
-import { create } from 'zustand';
+// src/store/recipeStore.js
+import create from 'zustand';
 
 export const useRecipeStore = create((set) => ({
   recipes: [],
-
-  // 🔎 Search & Filtering
   searchTerm: '',
   filteredRecipes: [],
+  favorites: [],
+  recommendations: [],
 
   setSearchTerm: (term) => set({ searchTerm: term }),
   filterRecipes: () =>
@@ -15,14 +16,24 @@ export const useRecipeStore = create((set) => ({
       ),
     })),
 
-  // already existing actions
-  addRecipe: (newRecipe) =>
-    set((state) => ({ recipes: [...state.recipes, newRecipe] })),
-  setRecipes: (recipes) => set({ recipes }),
-  deleteRecipe: (id) =>
-    set((state) => ({ recipes: state.recipes.filter((r) => r.id !== id) })),
-  updateRecipe: (updated) =>
+
+  addFavorite: (recipeId) =>
     set((state) => ({
-      recipes: state.recipes.map((r) => (r.id === updated.id ? updated : r)),
+      favorites: [...new Set([...state.favorites, recipeId])], // avoid duplicates
     })),
+
+  removeFavorite: (recipeId) =>
+    set((state) => ({
+      favorites: state.favorites.filter((id) => id !== recipeId),
+    })),
+
+
+  generateRecommendations: () =>
+    set((state) => {
+      const recommended = state.recipes.filter(
+        (recipe) =>
+          state.favorites.includes(recipe.id) && Math.random() > 0.5
+      );
+      return { recommendations: recommended };
+    }),
 }));
