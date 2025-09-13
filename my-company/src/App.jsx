@@ -4,12 +4,14 @@ import About from './components/About'
 import Services from './components/Services'
 import Contact from './components/Contact'
 import Navbar from './components/Navbar'
+import Counter from './components/Counter'
 import './App.css'
 
 function App() {
   return (
     <Router>
       <Navbar />
+      <Counter />
       <Routes>
         <Route path="/" element={<Home />}/>
         <Route path="/about" element={<About />} />
@@ -17,6 +19,8 @@ function App() {
         <Route path="/contact" element={<Contact />} />
       </Routes>
     </Router>
+
+
   )
 }
 
