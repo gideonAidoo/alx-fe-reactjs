@@ -1,12 +1,11 @@
-// src/components/RecipeDetails.jsx
 import React from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { useRecipeStore } from './recipeStore'; 
+import { useRecipeStore } from './recipeStore';
+
 const RecipeDetails = () => {
   const { id } = useParams();
-
   const recipe = useRecipeStore((state) =>
-    state.recipes.find((r) => r.id === Number(id))
+    state.recipes.find((r) => r.id === id)
   );
 
   if (!recipe) {
