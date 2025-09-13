@@ -1,13 +1,13 @@
-import React from 'react';
-import { useParams, Link } from 'react-router-dom';
-import { useRecipeStore } from './recipeStore';
-import DeleteRecipeButton from './DeleteRecipeButton';
+import React from "react";
+import { useParams, Link } from "react-router-dom";
+import { useRecipeStore } from "./recipeStore";
 
 const RecipeDetails = () => {
   const { id } = useParams();
 
-  // IDs stored as strings — compare as strings for reliability
-  const recipe = useRecipeStore((s) => s.recipes.find((r) => r.id === id));
+  const recipe = useRecipeStore((state) =>
+    state.recipes.find((r) => r.id.toString() === id)
+  );
 
   if (!recipe) {
     return (
@@ -19,25 +19,19 @@ const RecipeDetails = () => {
   }
 
   return (
-    <div style={{ border: '1px solid #ccc', padding: 16, margin: '16px 0' }}>
+    <div style={{ border: "1px solid #ccc", padding: "16px", margin: "16px 0" }}>
       <h2>{recipe.title}</h2>
       <p>{recipe.description}</p>
 
-      {/* ✅ explicit rendering of recipe.id — required by the checker */}
+      {/* ✅ This line makes sure recipe.id is explicitly in JSX */}
       <p>
-        <strong>Recipe ID:</strong> {recipe.id}
+        <strong>ID:</strong> {recipe.id}
       </p>
 
-      <div style={{ marginTop: 12 }}>
-        <Link to={`/edit/${recipe.id}`} style={{ marginRight: 12 }}>
-          Edit Recipe
-        </Link>
-        <DeleteRecipeButton recipeId={recipe.id} />
-      </div>
-
-      <div style={{ marginTop: 12 }}>
-        <Link to="/">Back to Recipes</Link>
-      </div>
+      <Link to={`/edit/${recipe.id}`} style={{ marginRight: "10px" }}>
+        Edit Recipe
+      </Link>
+      <Link to="/">Back to Recipes</Link>
     </div>
   );
 };
