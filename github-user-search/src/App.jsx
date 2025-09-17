@@ -1,23 +1,21 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar";
-import Home from "./components/pages/Home";
 import Search from "./components/pages/Search";
-import About from "./components/pages/About";
 
 function App() {
   return (
-    <div>
+    <>
       <Navbar />
-
-      <div style={{ padding: "1rem" }}>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/search" element={<Search />} />
-          <Route path="/about" element={<About />} />
-        </Routes>
-      </div>
-    </div>
+      <Routes>
+        <Route path="/" element={<h2>Welcome to GitHub User Search</h2>} />
+        <Route path="/search" element={<Search />} />
+        <Route
+          path="/about"
+          element={<h2>This app lets you search GitHub profiles 🔍</h2>}
+        />
+      </Routes>
+    </>
   );
 }
 
