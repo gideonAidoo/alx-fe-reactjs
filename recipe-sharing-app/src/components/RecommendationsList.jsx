@@ -16,7 +16,7 @@ const RecommendationsList = () => {
 
   return (
     <div>
-      <h2>🤖 Recommended for You</h2>
+      <h2> Recommended for You</h2>
       {recommendations.length === 0 ? (
         <p>No recommendations yet. Try adding some favorites!</p>
       ) : (
