@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { fetchAdvancedUserData } from "../services/githubService";
+import { fetchUserData, fetchAdvancedUserData } from "../services/githubService"; // ✅ include both
 
 function Search() {
   const [username, setUsername] = useState("");
@@ -8,7 +8,6 @@ function Search() {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [page, setPage] = useState(1);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -17,12 +16,22 @@ function Search() {
     setUsers([]);
 
     try {
-      const data = await fetchAdvancedUserData(username, location, minRepos, 1);
-      if (data && data.items?.length > 0) {
-        setUsers(data.items);
-        setPage(1);
+      // ✅ If advanced criteria provided → use advanced search
+      if (location || minRepos) {
+        const data = await fetchAdvancedUserData(username, location, minRepos);
+        if (data && data.items?.length > 0) {
+          setUsers(data.items);
+        } else {
+          setError("Looks like we cant find the user");
+        }
       } else {
-        setError("Looks like we cant find the user");
+        // ✅ Otherwise, use basic search
+        const data = await fetchUserData(username);
+        if (data) {
+          setUsers([data]);
+        } else {
+          setError("Looks like we cant find the user");
+        }
       }
     } catch (err) {
       setError("Looks like we cant find the user");
@@ -31,23 +40,8 @@ function Search() {
     }
   };
 
-  const handleLoadMore = async () => {
-    const nextPage = page + 1;
-    setLoading(true);
-
-    try {
-      const data = await fetchAdvancedUserData(username, location, minRepos, nextPage);
-      if (data && data.items?.length > 0) {
-        setUsers((prev) => [...prev, ...data.items]);
-        setPage(nextPage);
-      }
-    } finally {
-      setLoading(false);
-    }
-  };
-
   return (
-    <div className="p-6 max-w-4xl mx-auto">
+    <div className="p-6 max-w-3xl mx-auto">
       <h2 className="text-2xl font-bold mb-4 text-center">
         GitHub Advanced User Search 🔍
       </h2>
@@ -55,7 +49,7 @@ function Search() {
       {/* Search Form */}
       <form
         onSubmit={handleSubmit}
-        className="grid grid-cols-1 md:grid-cols-4 gap-4 bg-gray-100 p-4 rounded-lg shadow"
+        className="grid grid-cols-1 md:grid-cols-3 gap-4 bg-gray-100 p-4 rounded-lg shadow"
       >
         <input
           type="text"
@@ -83,7 +77,7 @@ function Search() {
 
         <button
           type="submit"
-          className="bg-blue-600 text-white p-2 rounded-md hover:bg-blue-700 transition"
+          className="col-span-1 md:col-span-3 bg-blue-600 text-white p-2 rounded-md hover:bg-blue-700 transition"
         >
           Search
         </button>
@@ -98,7 +92,7 @@ function Search() {
         {users.map((user) => (
           <div
             key={user.id}
-            className="flex items-center gap-4 border p-4 rounded-lg shadow-sm hover:shadow-md bg-white"
+            className="flex items-center gap-4 border p-4 rounded-lg shadow-sm hover:shadow-md"
           >
             <img
               src={user.avatar_url}
@@ -119,19 +113,6 @@ function Search() {
           </div>
         ))}
       </div>
-
-      {/* Load More Button */}
-      {users.length > 0 && (
-        <div className="text-center mt-6">
-          <button
-            onClick={handleLoadMore}
-            disabled={loading}
-            className="bg-gray-700 text-white px-4 py-2 rounded-md hover:bg-gray-800 transition"
-          >
-            {loading ? "Loading..." : "Load More"}
-          </button>
-        </div>
-      )}
     </div>
   );
 }
