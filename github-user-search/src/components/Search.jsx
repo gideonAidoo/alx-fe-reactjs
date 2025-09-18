@@ -16,16 +16,14 @@ function Search() {
     setUsers([]);
 
     try {
-      // ✅ Pass object instead of separate params
-      const data = await fetchAdvancedUserData({ username, location, minRepos });
-
-      if (data && data.length > 0) {
-        setUsers(data);
+      const data = await fetchAdvancedUserData(username, location, minRepos);
+      if (data && data.items?.length > 0) {
+        setUsers(data.items);
       } else {
-        setError("Looks like we can't find the user");
+        setError("Looks like we cant find the user"); 
       }
     } catch (err) {
-      setError("Looks like we can't find the user");
+      setError("Looks like we cant find the user"); 
     } finally {
       setLoading(false);
     }
