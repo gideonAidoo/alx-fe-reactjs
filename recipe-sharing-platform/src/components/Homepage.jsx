@@ -1,5 +1,5 @@
 import React from "react";
-import recipesData from "../data.json"; // go up one level to reach data.json
+import recipesData from "../data.json"; // go up one folder to access data.json
 
 const HomePage = () => {
   return (
