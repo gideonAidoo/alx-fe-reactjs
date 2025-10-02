@@ -1,14 +1,12 @@
-import React from 'react'
-import Navbar from './components/Navbar'
-import './index.css'
+import React from "react";
+import HomePage from "./components/Homepage";
 
 function App() {
-
   return (
-    <>
-     <Navbar />
-    </>
-  )
+    <div className="bg-gray-100 min-h-screen">
+      <HomePage />
+    </div>
+  );
 }
 
-export default App
+export default App;
