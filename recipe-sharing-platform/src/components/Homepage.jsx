@@ -1,5 +1,5 @@
 import React from "react";
-import recipesData from "../data.json"; // go up one level
+import recipesData from "../data.json"; // go up one level to reach data.json
 
 const HomePage = () => {
   return (
@@ -10,7 +10,7 @@ const HomePage = () => {
         {recipesData.map((recipe) => (
           <div
             key={recipe.id}
-            className="bg-white rounded-2xl shadow-md overflow-hidden hover:shadow-lg transition-shadow"
+            className="bg-white rounded-2xl shadow-md overflow-hidden hover:shadow-lg transition-transform hover:scale-105"
           >
             <img
               src={recipe.image}
