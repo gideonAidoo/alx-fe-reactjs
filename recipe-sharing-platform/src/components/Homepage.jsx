@@ -1,5 +1,6 @@
 import React from "react";
-import recipesData from "../data.json"; 
+import recipesData from "../data.json"; // relative path to data.json
+
 const HomePage = () => {
   return (
     <div className="p-6">
