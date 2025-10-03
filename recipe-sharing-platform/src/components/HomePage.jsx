@@ -1,33 +1,34 @@
-import React, { useState, useEffect } from "react";
-import recipesData from "../data.json"; // adjust path if needed
+import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import recipesData from "../data/recipes.json"; // ✅ import directly
 
 function HomePage() {
   const [recipes, setRecipes] = useState([]);
 
   useEffect(() => {
-    // Load mock data into state on mount
-    setRecipes(recipesData);
+    setRecipes(recipesData); // ✅ load directly from import
   }, []);
 
   return (
     <div className="p-6">
-      <h1 className="text-3xl font-bold mb-6 text-center">Recipe Sharing Platform</h1>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+      <h1 className="text-3xl font-bold mb-6">🍴 Delicious Recipes</h1>
+      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
         {recipes.map((recipe) => (
-          <div
+          <Link
             key={recipe.id}
-            className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl hover:scale-105 transition-transform duration-200"
+            to={`/recipe/${recipe.id}`}
+            className="block border rounded-xl overflow-hidden shadow hover:shadow-lg transition"
           >
             <img
               src={recipe.image}
               alt={recipe.title}
-              className="w-full h-40 object-cover"
+              className="w-full h-48 object-cover"
             />
             <div className="p-4">
-              <h2 className="text-xl font-semibold mb-2">{recipe.title}</h2>
-              <p className="text-gray-600">{recipe.summary}</p>
+              <h2 className="text-xl font-semibold">{recipe.title}</h2>
+              <p className="text-gray-600 text-sm mt-2">{recipe.summary}</p>
             </div>
-          </div>
+          </Link>
         ))}
       </div>
     </div>
