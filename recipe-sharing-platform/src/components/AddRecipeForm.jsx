@@ -1,12 +1,12 @@
 import { useState } from "react";
 
-function Contact() {
+function AddRecipeForm({ onAddRecipe }) {
   const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    message: "",
+    title: "",
+    ingredients: "",
+    steps: "",
+    image: "",
   });
-  const [success, setSuccess] = useState(false);
 
   const handleChange = (e) => {
     setFormData({
@@ -18,63 +18,74 @@ function Contact() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // ✅ Normally you would send formData to your backend here
-    console.log("Form submitted:", formData);
+    // Convert ingredients and steps into arrays
+    const newRecipe = {
+      id: Date.now(), // unique ID
+      title: formData.title,
+      ingredients: formData.ingredients
+        .split(",")
+        .map((item) => item.trim()),
+      steps: formData.steps.split(".").map((step) => step.trim()).filter(Boolean),
+      image: formData.image || "https://via.placeholder.com/300", // fallback image
+    };
 
-    // Show success message
-    setSuccess(true);
+    onAddRecipe(newRecipe);
 
-    // Clear form fields
-    setFormData({ name: "", email: "", message: "" });
-
-    // Hide success after 3 seconds
-    setTimeout(() => setSuccess(false), 3000);
+    // Reset form
+    setFormData({
+      title: "",
+      ingredients: "",
+      steps: "",
+      image: "",
+    });
   };
 
   return (
-    <div className="max-w-lg mx-auto p-6">
-      <h1 className="text-2xl font-bold mb-4">Contact Us</h1>
-      {success && (
-        <div className="mb-4 p-3 text-green-800 bg-green-100 border border-green-300 rounded">
-          Message sent successfully!
-        </div>
-      )}
+    <div className="max-w-lg mx-auto p-6 bg-white shadow-md rounded">
+      <h2 className="text-xl font-bold mb-4">Add a New Recipe</h2>
       <form onSubmit={handleSubmit} className="space-y-4">
         <input
           type="text"
-          name="name"
-          placeholder="Your Name"
-          value={formData.name}
+          name="title"
+          placeholder="Recipe Title"
+          value={formData.title}
           onChange={handleChange}
-          className="w-full p-2 border rounded"
           required
-        />
-        <input
-          type="email"
-          name="email"
-          placeholder="Your Email"
-          value={formData.email}
-          onChange={handleChange}
           className="w-full p-2 border rounded"
-          required
         />
         <textarea
-          name="message"
-          placeholder="Your Message"
-          value={formData.message}
+          name="ingredients"
+          placeholder="Ingredients (comma separated)"
+          value={formData.ingredients}
           onChange={handleChange}
-          className="w-full p-2 border rounded h-32"
           required
+          className="w-full p-2 border rounded h-24"
+        />
+        <textarea
+          name="steps"
+          placeholder="Steps (separate sentences with a period)"
+          value={formData.steps}
+          onChange={handleChange}
+          required
+          className="w-full p-2 border rounded h-32"
+        />
+        <input
+          type="text"
+          name="image"
+          placeholder="Image URL (optional)"
+          value={formData.image}
+          onChange={handleChange}
+          className="w-full p-2 border rounded"
         />
         <button
           type="submit"
-          className="bg-orange-400 text-white px-4 py-2 rounded hover:bg-orange-600"
+          className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
         >
-          Send Message
+          Add Recipe
         </button>
       </form>
     </div>
   );
 }
 
-export default Contact;
+export default AddRecipeForm;
