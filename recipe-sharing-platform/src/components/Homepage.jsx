@@ -1,8 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import recipesData from "../data.json"; // adjust path if needed
 
 function HomePage() {
-  const [recipes, setRecipes] = useState(recipesData);
+  const [recipes, setRecipes] = useState([]);
+
+  useEffect(() => {
+    // Load mock data into state on mount
+    setRecipes(recipesData);
+  }, []);
 
   return (
     <div className="p-6">
